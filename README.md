@@ -9,7 +9,7 @@ A premium, interactive Daily Tracker designed specifically for the **cora-to.com
 - **Dark/Light Mode**: Default dark blue and toggleable light pink theme. It's a flashbang. You have been warned.
 
 ## 🔗 Live Access
-- **Web Tool**: [tools.mewsie.world/dailytracker.html](https://tools.mewsie.world/dailytracker.html)
+- **Web Tool**: [tools.mewsie.world/daily-tracker/index.html](https://tools.mewsie.world/daily-tracker/index.html)
 - **Preview**: See the interface in action below:
 ![CoraTO Tracker Preview](dailiespreview.gif)
 

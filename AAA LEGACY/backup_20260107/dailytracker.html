@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoraTO | Dailies Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .sub-header {
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside>
+        <div class="brand">CoraTO</div>
+        <div style="text-align:center; font-size:0.75rem; color:var(--text-dim); margin-bottom:15px; margin-top:-15px;">
+            Updated Jan 5, 2026</div>
+        <div style="padding: 0 20px;">
+            <button class="btn btn-theme" onclick="toggleTheme()">TOGGLE LIGHT PINK THEME</button>
+        </div>
+
+        <div class="nav-label"
+            onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed');">Normal
+            Quests</div>
+        <div class="nav-shell">
+            <div id="list-normal" class="nav-inner"></div>
+        </div>
+
+        <div class="nav-label collapsed"
+            onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed');">Shadow
+            Hunt (Stella)</div>
+        <div class="nav-shell collapsed">
+            <div id="list-shadow-stella" class="nav-inner"></div>
+        </div>
+
+        <div class="nav-label collapsed"
+            onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed');">Shadow
+            Jia (Lv 180+)</div>
+        <div class="nav-shell collapsed">
+            <div id="list-shadow-jia" class="nav-inner"></div>
+        </div>
+
+        <div class="nav-label collapsed"
+            onclick="this.classList.toggle('collapsed'); this.nextElementSibling.classList.toggle('collapsed');">Grass
+            Daily (Lv 20+)</div>
+        <div class="nav-shell collapsed">
+            <div id="list-grass" class="nav-inner"></div>
+        </div>
+
+        <div
+            style="margin-top:auto; padding:20px; font-size:0.65rem; color:var(--text-dim); border-top:1px solid var(--border); line-height:1.6;">
+            Made for <b>cora-to.com</b><br>
+            Credits: <b>Admin Spooki & GM Mewsie</b><br>
+            A server by the people, for the people.
+        </div>
+    </aside>
+
+    <main>
+        <div class="container">
+            <!-- Rewards Tally Box -->
+            <div class="card coupon-box">
+                <div
+                    style="font-size: 0.85rem; color: var(--text-dim); font-weight: 800; letter-spacing: 1px; margin-bottom:10px;">
+                    TOTAL REWARDS TALLY</div>
+
+                <div class="rewards-split">
+                    <!-- GUARANTEED -->
+                    <div style="width:100%;">
+                        <div class="sub-header">Guaranteed (100% Drop)</div>
+                        <div class="rewards-grid">
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-daily-cp">0</div>
+                                <div class="reward-label">Daily Coupon</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-galder">0</div>
+                                <div class="reward-label">Galder Check</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-tears">0</div>
+                                <div class="reward-label">Star Tears</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-card">0</div>
+                                <div class="reward-label">Card Pack No.5</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ESTIMATED -->
+                    <div style="width:100%; margin-top:20px;">
+                        <div class="sub-header">Estimated (Average per Chance)</div>
+                        <div class="rewards-grid">
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-major-cora">0</div>
+                                <div class="reward-label">Major Cora Boxes</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-cora-cp">0</div>
+                                <div class="reward-label">Cora Coupons</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-eggs">0</div>
+                                <div class="reward-label">Bonus Eggs</div>
+                            </div>
+                            <!-- Shards -->
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-gorgon">0</div>
+                                <div class="reward-label">Gorgon Shard</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-chary">0</div>
+                                <div class="reward-label">Charybdis Shard</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-scylla">0</div>
+                                <div class="reward-label">Scylla Shard</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-hecate">0</div>
+                                <div class="reward-label">Hecate Shard</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-count" id="count-chronos">0</div>
+                                <div class="reward-label">Chronos Shard</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="card progress-card">
+                <div class="progress-main">
+                    <div class="progress-header">
+                        <span>PROGRESS</span>
+                        <span id="prog-txt-total">0/50</span>
+                    </div>
+                    <div class="progress-multi-bar">
+                        <div class="prog-group" style="flex: 12">
+                            <div class="prog-group-label">Normal: <b id="prog-normal">0/12</b></div>
+                            <div class="bar-bg mini">
+                                <div id="bar-normal" class="bar-fill seg-normal"></div>
+                            </div>
+                        </div>
+                        <div class="prog-group" style="flex: 12">
+                            <div class="prog-group-label">Stella: <b id="prog-stella">0/12</b></div>
+                            <div class="bar-bg mini">
+                                <div id="bar-stella" class="bar-fill seg-stella"></div>
+                            </div>
+                        </div>
+                        <div class="prog-group" style="flex: 12">
+                            <div class="prog-group-label">Jia: <b id="prog-jia">0/12</b></div>
+                            <div class="bar-bg mini">
+                                <div id="bar-jia" class="bar-fill seg-jia"></div>
+                            </div>
+                        </div>
+                        <div class="prog-group" style="flex: 14">
+                            <div class="prog-group-label">Grass: <b id="prog-grass">0/14</b></div>
+                            <div class="bar-bg mini">
+                                <div id="bar-grass" class="bar-fill seg-grass"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-action">
+                    <button class="btn-reset-mini" onclick="fullReset()">RESET</button>
+                </div>
+            </div>
+
+            <!-- Main Content Area (New 3-Column Layout) -->
+            <div class="content-grid">
+                <!-- Location Map (Left Column) -->
+                <div class="map-frame">
+                    <img src="https://wiki.ragnatales.com.br/images/5/52/Trickster_World_Map.png" id="location-img"
+                        class="map-img" alt="Quest Location">
+                </div>
+
+                <!-- NPC & Quest Details (Middle Column) -->
+                <div class="npc-details-col">
+                    <!-- NPC Image -->
+                    <div class="npc-frame" id="npc-img-container">
+                        <span class="no-content">No NPC Image</span>
+                    </div>
+
+                    <!-- Quest Info Box -->
+                    <div class="info-box" id="view-info">
+                        <div style="text-align:center; color:var(--text-dim);">Select a quest...</div>
+                    </div>
+                </div>
+
+                <!-- Bestiary (Right Column) -->
+                <div class="bestiary-col">
+                    <div class="bestiary-header">MONSTERS</div>
+                    <div id="view-best" class="bestiary-grid"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

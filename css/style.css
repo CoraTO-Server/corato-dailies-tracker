@@ -46,7 +46,7 @@ aside {
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
     flex-shrink: 0;
 }
 
@@ -527,6 +527,12 @@ main {
     box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
 }
 
+.btn-theme.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
 /* Progress Section */
 .progress-card {
     display: flex;
@@ -729,4 +735,27 @@ main {
 
 [data-theme="light"] .seg-grass {
     background: linear-gradient(90deg, #c9184a, #800f2f);
+}
+
+.fixed-credits {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    text-align: right;
+    pointer-events: none;
+    z-index: 1000;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background: rgba(11, 14, 20, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--border);
+}
+
+[data-theme="light"] .fixed-credits {
+    background: rgba(255, 240, 245, 0.7);
+    text-shadow: none;
 }

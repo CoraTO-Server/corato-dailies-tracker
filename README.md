@@ -1,12 +1,14 @@
-# CoraTO | Command Center V22
+# CoraTO | Dailies Tracker
 
 A premium, interactive Daily Tracker designed specifically for the **cora-to.com** Trickster Online server.
+Last updated: Jan 7th, 2026
 
 ## ✨ Features
 - **Categorized Tracking**: Support for Normal Quests, Shadow Stella, Shaman Girl Jia, and Monkey_T Grass Dailies.
 - **RNG Simulation**: Live roll simulation for quest rewards (Cora Coupons vs. Bonus Eggs, Major Cora Boxes, etc.).
 - **Visual Feedback**: Shake-red animations for unlucky Jia rolls and gradient progress bars.
 - **Dark/Light Mode**: Default dark blue and toggleable light pink theme. It's a flashbang. You have been warned.
+- **Sorting Options**: Because why not. Location and Type. 
 
 ## 🔗 Live Access
 - **Web Tool**: [tools.mewsie.world/daily-tracker/index.html](https://tools.mewsie.world/daily-tracker/index.html)

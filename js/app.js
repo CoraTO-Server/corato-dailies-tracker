@@ -10,53 +10,175 @@ let done = JSON.parse(localStorage.getItem('cto_v22_done') || '{}');
 const STAR_GAZER_LINK = 'https://wikimirror.lifeto.co/wiki.ggftw.com/trickster/Star_Gazing.html';
 const MAJOR_CORA_LINK = 'https://mewsie.world/CoraTOWiki/index.php/Cora_Boxes#Major_Cora_Boxes';
 
-function init() {
-    buildList('list-normal', NORMAL_QUESTS);
-    buildList('list-shadow-stella', SHADOW_STELLA);
-    buildList('list-shadow-jia', SHADOW_JIA);
-    buildList('list-grass', GRASS_QUESTS);
+let sortMode = 'location'; // Default sort mode
 
+const LOCATION_CATEGORIES = [
+    "Coral Beach", "Desert Beach", "Megalopolis", "Caballa Relics", "Oops Wharf",
+    "Mirage", "Mermaid Palace", "Ghost Blue", "Rose Garden", "Black Swamp",
+    "Underground Dev Room", "Snow Hill", "Techichi", "Tapasco", "Abyss"
+];
+
+function getQuestLocation(key, val) {
+    const k = key.toLowerCase();
+    const l = val.loc_img ? val.loc_img.toLowerCase() : "";
+
+    if (k.includes("coral")) return "Coral Beach";
+    if (k.includes("desert") || k.includes("paradise")) return "Desert Beach";
+    if (k.includes("megalo")) return "Megalopolis";
+    if (k.includes("caballa") || k.includes("azteca")) return "Caballa Relics";
+    if (k.includes("oops")) return "Oops Wharf";
+    if (k.includes("mermaid")) return "Mermaid Palace";
+    if (k.includes("ghost blue") || k.includes("aquarius") || l.includes("ghostb")) return "Ghost Blue";
+    if (k.includes("rose") || l.includes("rose")) return "Rose Garden";
+    if (k.includes("swamp") || l.includes("blacks")) return "Black Swamp";
+    if (k.includes("snow") || l.includes("snow")) return "Snow Hill";
+    if (k.includes("techi")) return "Techichi";
+    if (k.includes("tapasco")) return "Tapasco";
+    if (k.includes("dev room")) return "Underground Dev Room";
+    if (k.includes("abyss")) return "Abyss";
+    if (k.includes("mirage")) return "Mirage";
+
+    return "Other";
+}
+
+function init() {
+    renderSidebar();
+
+    // Show first quest details
     const firstKey = Object.keys(NORMAL_QUESTS)[0];
     showDetails(firstKey, NORMAL_QUESTS[firstKey]);
 
     updateStats();
 }
 
-function buildList(el, data) {
-    const cont = document.getElementById(el);
-    for (const [key, val] of Object.entries(data)) {
-        const det = document.createElement('div');
-        det.className = 'q-row';
-        det.id = `row-${key.replace(/[^a-zA-Z0-9]/g, '')}`;
+function renderSidebar() {
+    const container = document.getElementById('sidebar-lists-container');
+    container.innerHTML = '';
 
-        const chkSpan = document.createElement('span');
-        chkSpan.onclick = (e) => {
-            e.stopPropagation();
-            toggleDone(key + "_" + val.q);
-        };
-        const chk = document.createElement('input');
-        chk.type = "checkbox";
-        chk.checked = !!done[key + "_" + val.q];
-        chk.style.marginRight = "10px";
-        chkSpan.appendChild(chk);
+    if (sortMode === 'type') {
+        const sections = [
+            { id: 'list-normal', label: 'Normal Daily', data: NORMAL_QUESTS, collapsed: false },
+            { id: 'list-shadow-stella', label: 'Shadow Hunt (Stella)', data: SHADOW_STELLA, collapsed: true },
+            { id: 'list-shadow-jia', label: 'Shadow MQ Hunt (Jia)', data: SHADOW_JIA, collapsed: true },
+            { id: 'list-grass', label: 'Grass Shard Daily (Monkey_T)', data: GRASS_QUESTS, collapsed: true }
+        ];
 
-        const lbl = document.createElement('span');
-        lbl.innerText = key;
+        sections.forEach(s => {
+            const label = document.createElement('div');
+            label.className = `nav-label ${s.collapsed ? 'collapsed' : ''}`;
+            label.innerText = s.label;
+            label.onclick = () => {
+                label.classList.toggle('collapsed');
+                shell.classList.toggle('collapsed');
+            };
 
-        det.appendChild(chkSpan);
-        det.appendChild(lbl);
+            const shell = document.createElement('div');
+            shell.className = `nav-shell ${s.collapsed ? 'collapsed' : ''}`;
+            const inner = document.createElement('div');
+            inner.id = s.id;
+            inner.className = 'nav-inner';
+            shell.appendChild(inner);
 
-        det.onclick = (e) => {
-            document.querySelectorAll('.q-row').forEach(r => r.style.background = 'transparent');
-            det.style.background = 'var(--bg-card)';
-            if (e.target !== chk && e.target !== chkSpan) {
-                showDetails(key, val);
+            container.appendChild(label);
+            container.appendChild(shell);
+
+            buildList(inner, s.data);
+        });
+    } else {
+        // Sort by Location
+        const locGroups = {};
+        LOCATION_CATEGORIES.forEach(loc => locGroups[loc] = []);
+        locGroups["Other"] = [];
+
+        const allQuests = [
+            { data: NORMAL_QUESTS },
+            { data: SHADOW_STELLA },
+            { data: SHADOW_JIA },
+            { data: GRASS_QUESTS }
+        ];
+
+        allQuests.forEach(cat => {
+            for (const [key, val] of Object.entries(cat.data)) {
+                const loc = getQuestLocation(key, val);
+                locGroups[loc].push({ key, val });
             }
-        }
+        });
 
-        if (done[key + "_" + val.q]) det.classList.add('done');
-        cont.appendChild(det);
+        LOCATION_CATEGORIES.concat(["Other"]).forEach((loc, idx) => {
+            const quests = locGroups[loc];
+            if (quests.length === 0) return;
+
+            const label = document.createElement('div');
+            label.className = `nav-label ${idx > 0 ? 'collapsed' : ''}`;
+            label.innerText = loc;
+            label.onclick = () => {
+                label.classList.toggle('collapsed');
+                shell.classList.toggle('collapsed');
+            };
+
+            const shell = document.createElement('div');
+            shell.className = `nav-shell ${idx > 0 ? 'collapsed' : ''}`;
+            const inner = document.createElement('div');
+            inner.className = 'nav-inner';
+            shell.appendChild(inner);
+
+            container.appendChild(label);
+            container.appendChild(shell);
+
+            quests.forEach(q => {
+                const det = createRow(q.key, q.val);
+                inner.appendChild(det);
+            });
+        });
     }
+}
+
+function createRow(key, val) {
+    const det = document.createElement('div');
+    det.className = 'q-row';
+    det.id = `row-${key.replace(/[^a-zA-Z0-9]/g, '')}`;
+
+    const chkSpan = document.createElement('span');
+    chkSpan.onclick = (e) => {
+        e.stopPropagation();
+        toggleDone(key + "_" + val.q);
+    };
+    const chk = document.createElement('input');
+    chk.type = "checkbox";
+    chk.checked = !!done[key + "_" + val.q];
+    chk.style.marginRight = "10px";
+    chkSpan.appendChild(chk);
+
+    const lbl = document.createElement('span');
+    lbl.innerText = key;
+
+    det.appendChild(chkSpan);
+    det.appendChild(lbl);
+
+    det.onclick = (e) => {
+        document.querySelectorAll('.q-row').forEach(r => r.style.background = 'transparent');
+        det.style.background = 'var(--bg-card)';
+        if (e.target !== chk && e.target !== chkSpan) {
+            showDetails(key, val);
+        }
+    }
+
+    if (done[key + "_" + val.q]) det.classList.add('done');
+    return det;
+}
+
+function buildList(cont, data) {
+    for (const [key, val] of Object.entries(data)) {
+        const row = createRow(key, val);
+        cont.appendChild(row);
+    }
+}
+
+function setSort(mode) {
+    sortMode = mode;
+    document.getElementById('btn-sort-loc').classList.toggle('active', mode === 'location');
+    document.getElementById('btn-sort-type').classList.toggle('active', mode === 'type');
+    renderSidebar();
 }
 
 function toggleDone(id) {
@@ -69,15 +191,7 @@ function toggleDone(id) {
 
     localStorage.setItem('cto_v22_done', JSON.stringify(done));
 
-    document.getElementById('list-normal').innerHTML = '';
-    document.getElementById('list-shadow-stella').innerHTML = '';
-    document.getElementById('list-shadow-jia').innerHTML = '';
-    document.getElementById('list-grass').innerHTML = '';
-
-    buildList('list-normal', NORMAL_QUESTS);
-    buildList('list-shadow-stella', SHADOW_STELLA);
-    buildList('list-shadow-jia', SHADOW_JIA);
-    buildList('list-grass', GRASS_QUESTS);
+    renderSidebar();
 
     updateStats(!wasDone ? id : null);
 }

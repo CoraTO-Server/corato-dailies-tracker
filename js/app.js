@@ -4,7 +4,7 @@
  */
 
 // Version check for console debugging
-window.APP_VERSION = "2.2.1-FINAL-SYNC";
+window.APP_VERSION = "2.2.5";
 console.log("CoraTO Tracker JS Loading - Version: " + window.APP_VERSION);
 
 let done = JSON.parse(localStorage.getItem('cto_v22_done') || '{}');
@@ -203,7 +203,7 @@ function showDetails(key, val) {
         <h3 class="quest-title">${key}</h3>
         <div class="quest-meta">
             <div class="meta-item"><span class="meta-label">NPC:</span> <span class="meta-value">${val.q}</span></div>
-            ${val.npc_loc ? `<div class="meta-item"><span class="meta-label">NPC Location:</span> <span class="meta-value">${val.npc_loc}</span></div>` : ''}
+            ${val.npc_loc ? `<div class="meta-item"><span class="meta-label">NPC Location:</span> <span class="meta-value" style="color: var(--accent); font-weight: 700;">${val.npc_loc}</span></div>` : ''}
             <div class="meta-item"><span class="meta-label">Req:</span> <span class="req-val">${sReq}</span></div>
         </div>
         <div class="quest-need"><span class="meta-label">Need:</span> <span class="need-content">${itemImg} <span class="need-text">${val.r}</span></span></div>

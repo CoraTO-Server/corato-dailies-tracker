@@ -1,7 +1,7 @@
 # CoraTO | Dailies Tracker
 
 A premium, interactive Daily Tracker designed specifically for the **cora-to.com** Trickster Online server.
-Last updated: Jan 7th, 2026
+Last updated: Jan 9th, 2026
 
 ## ✨ Features
 - **Categorized Tracking**: Support for Normal Quests, Shadow Stella, Shaman Girl Jia, and Monkey_T Grass Dailies.

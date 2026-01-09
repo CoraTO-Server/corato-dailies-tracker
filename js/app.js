@@ -30,8 +30,8 @@ function getQuestLocation(key, val) {
     if (k.includes("oops")) return "Oops Wharf";
     if (k.includes("mermaid")) return "Mermaid Palace";
     if (k.includes("ghost blue") || k.includes("aquarius") || l.includes("ghostb")) return "Ghost Blue";
-    if (k.includes("rose") || l.includes("rose")) return "Rose Garden";
     if (k.includes("swamp") || l.includes("blacks")) return "Black Swamp";
+    if (k.includes("rose") || l.includes("rose")) return "Rose Garden";
     if (k.includes("snow") || l.includes("snow")) return "Snow Hill";
     if (k.includes("techi")) return "Techichi";
     if (k.includes("tapasco")) return "Tapasco";

@@ -1,10 +1,11 @@
 /**
  * CoraTO | A server by the people, for the people
+ * VERSION: 2.2.1-FINAL-SYNC
  */
 
 // Version check for console debugging
-window.APP_VERSION = "2.2.6";
-console.log("CoraTO Tracker JS Loading - Version: " + window.APP_VERSION + " [Jan 11, 2026]");
+window.APP_VERSION = "2.2.5";
+console.log("CoraTO Tracker JS Loading - Version: " + window.APP_VERSION);
 
 let done = JSON.parse(localStorage.getItem('cto_v22_done') || '{}');
 
@@ -12,7 +13,6 @@ const STAR_GAZER_LINK = 'https://wikimirror.lifeto.co/wiki.ggftw.com/trickster/S
 const MAJOR_CORA_LINK = 'https://mewsie.world/CoraTOWiki/index.php/Cora_Boxes#Major_Cora_Boxes';
 
 let sortMode = 'location';
-let expandedState = JSON.parse(localStorage.getItem('cto_v22_expanded') || '{}');
 
 const LOCATION_CATEGORIES = [
     "Coral Beach", "Desert Beach", "Megalopolis", "Caballa Relics", "Oops Wharf",
@@ -59,7 +59,6 @@ function init() {
 function renderSidebar() {
     const container = document.getElementById('sidebar-lists-container');
     if (!container) return;
-    const scrollPos = container.scrollTop;
     container.innerHTML = '';
 
     if (sortMode === 'type') {
@@ -72,25 +71,18 @@ function renderSidebar() {
 
         sections.forEach(s => {
             const label = document.createElement('div');
-            const isExpanded = expandedState[s.label] !== undefined ? expandedState[s.label] : !s.collapsed;
-            label.className = `nav-label ${isExpanded ? '' : 'collapsed'}`;
+            label.className = `nav-label ${s.collapsed ? 'collapsed' : ''}`;
             label.innerText = s.label;
-
             const shell = document.createElement('div');
-            shell.className = `nav-shell ${isExpanded ? '' : 'collapsed'}`;
-
+            shell.className = `nav-shell ${s.collapsed ? 'collapsed' : ''}`;
             const inner = document.createElement('div');
             inner.id = s.id;
             inner.className = 'nav-inner';
             shell.appendChild(inner);
-
             label.onclick = () => {
-                const isCollapsedNow = label.classList.toggle('collapsed');
+                label.classList.toggle('collapsed');
                 shell.classList.toggle('collapsed');
-                expandedState[s.label] = !isCollapsedNow;
-                localStorage.setItem('cto_v22_expanded', JSON.stringify(expandedState));
             };
-
             container.appendChild(label);
             container.appendChild(shell);
             buildList(inner, s.data);
@@ -116,32 +108,23 @@ function renderSidebar() {
         LOCATION_CATEGORIES.concat(["Other"]).forEach((loc, idx) => {
             const qArr = locGroups[loc];
             if (!qArr || qArr.length === 0) return;
-
             const label = document.createElement('div');
-            const isExpanded = expandedState[loc] !== undefined ? expandedState[loc] : (idx === 0);
-            label.className = `nav-label ${isExpanded ? '' : 'collapsed'}`;
+            label.className = `nav-label ${idx > 0 ? 'collapsed' : ''}`;
             label.innerText = loc;
-
             const shell = document.createElement('div');
-            shell.className = `nav-shell ${isExpanded ? '' : 'collapsed'}`;
-
+            shell.className = `nav-shell ${idx > 0 ? 'collapsed' : ''}`;
             const inner = document.createElement('div');
             inner.className = 'nav-inner';
             shell.appendChild(inner);
-
             label.onclick = () => {
-                const isCollapsedNow = label.classList.toggle('collapsed');
+                label.classList.toggle('collapsed');
                 shell.classList.toggle('collapsed');
-                expandedState[loc] = !isCollapsedNow;
-                localStorage.setItem('cto_v22_expanded', JSON.stringify(expandedState));
             };
-
             container.appendChild(label);
             container.appendChild(shell);
             qArr.forEach(q => inner.appendChild(createRow(q.key, q.val)));
         });
     }
-    container.scrollTop = scrollPos;
 }
 
 function createRow(key, val) {
